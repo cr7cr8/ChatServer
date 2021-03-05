@@ -1,22 +1,22 @@
 const express = require("express")
 const app = express()
 const cors = require("cors");
-const socketIO = require("socket.io")
-const { compareAsc, format, formatDistanceToNow, } = require("date-fns");
-const { zhCN } = require('date-fns/locale');
+// const socketIO = require("socket.io")
+// const { compareAsc, format, formatDistanceToNow, } = require("date-fns");
+// const { zhCN } = require('date-fns/locale');
 
 
-const user = require("./router/user")
-const { User } = require("./db/schema")
+// const user = require("./router/user")
+// const { User } = require("./db/schema")
 
 
-const info = require("./router/info")
+//const info = require("./router/info")
 
-app.use(cors());
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use("/api/user", user)
-app.use("/info", info)
+// app.use(cors());
+// app.use(express.json())
+// app.use(express.urlencoded({ extended: true }))
+// app.use("/api/user", user)
+// app.use("/info", info)
 
 app.get("/", (req, res) => { res.send("<h2>" + new Date() + "</h2>") })
 
