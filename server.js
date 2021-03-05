@@ -23,7 +23,7 @@ app.get("/", (req, res) => { res.send("<h2>" + new Date() + "</h2>") })
 
 const server = app.listen(process.env.PORT || 80)
 
-
+/*
 const io = socketIO(server)
 let socketArr = [];
 let offlineMessageArr = [];
@@ -157,5 +157,5 @@ io.on("connection", function (socket) {
 })
 
 
-
+*/
 
