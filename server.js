@@ -21,7 +21,7 @@ app.use("/info", info)
 app.get("/", (req, res) => { res.send("<h2>" + new Date() + "</h2>") })
 
 
-const server = app.listen(80)
+const server = app.listen(process.env.PORT || 80)
 
 
 const io = socketIO(server)
