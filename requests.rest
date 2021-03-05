@@ -1,0 +1,78 @@
+
+
+### login USER
+POST http://localhost/api/user/login
+Content-Type: application/json
+
+{
+    "username":"aaa",
+    "password":"aaa"
+}
+###
+
+### get USERtHEME
+GET http://localhost/api/user/gettheme/aaa
+
+###
+
+
+
+### Register USER
+POST http://192.168.0.100/api/user/register
+Content-Type: application/json
+
+{
+    "userName":"d大声道fdsfa",
+    "password":"zdd"
+
+}
+###
+
+
+
+GET http://localhost/api/theme/
+###
+
+
+
+GET http://localhost/api/picture/getpictureid/aaa/
+###
+
+POST http://localhost/api/theme/a
+Content-Type: application/json
+
+{
+    "owner":"5ee9f3f0fd0f1b12c064bd38",
+    "theme":
+{
+"color1":"rgb(56,142,60,1.0)",
+"color2":"rgb(224,224,224,0.8)",
+"color3":"rgb(183,28,28,0.9)",
+"color4":"rgb(255,224,130,0.5)",
+"color5":"rgb(62,39,35,0.8)",
+"fontSizePC1":1.9,
+"fontSizePC2":2,
+"fontSizePC3":2,
+"fontSizePC4":2,
+"fontSizePC5":2,
+"fontSizePhone1":4.4,
+"fontSizePhone2":4,
+"fontSizePhone3":4,
+"fontSizePhone4":4,
+"fontSizePhone5":4,
+"logoImageSizePC":78,
+"logoImageSizePhone":54,
+"logoTextSizePC":3.5,
+"logoTextSizePhone":1.9,
+"fontSize1":"1.9rem",
+"fontSize2":"2rem",
+"fontSize3":"2rem",
+"fontSize4":"2rem",
+"fontSize5":"2rem",
+"logoImageSize":"78px",
+"logoTextSize":"3.5em"
+}
+ 
+}
+###
+
