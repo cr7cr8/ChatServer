@@ -92,8 +92,8 @@ io.on("connection", function (socket) {
 
   socket.on("test", function (buf) {
     //   console.log("server ttttt",Object.keys(obj))
-   // console.log(buf)
- 
+    console.log(buf)
+
     //     var imgArray = new Uint8Array(buf);
     //     console.log(imgArray.length)
 
@@ -134,17 +134,17 @@ io.on("connection", function (socket) {
       User.findOne({ userName: socket.userName }).then(({ friendsList }) => {
         //  console.log(friendsList)
 
-        const arr_=[]
+        const arr_ = []
         friendsList.forEach((friend) => {
-          arr.forEach(people=>{
-            if (people.userName === friend){
+          arr.forEach(people => {
+            if (people.userName === friend) {
               arr_.push(people)
             }
           })
         });
 
-        arr.forEach(people=>{
-          if (!friendsList.includes(people.userName)){
+        arr.forEach(people => {
+          if (!friendsList.includes(people.userName)) {
             arr_.push(people)
           }
         })
