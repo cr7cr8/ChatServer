@@ -94,11 +94,11 @@ io.on("connection", function (socket) {
     //   console.log("server ttttt",Object.keys(obj))
     console.log(buf)
     
-    //     var imgArray = new Uint8Array(buf);
-    //     console.log(imgArray.length)
-//
+        var imgArray = new Uint8Array(buf);
+        console.log(imgArray.length)
 
-    // socket.emit("clientBuffer",{buffer:obj.buffer})
+
+  //  socket.emit("clientBuffer",{buffer:obj.buffer})
   })
 
 
