@@ -92,7 +92,7 @@ io.on("connection", function (socket) {
 
   socket.on("test", function (buf) {
     //   console.log("server ttttt",Object.keys(obj))
-   // console.log(buf)
+    console.log(buf)
  
     //     var imgArray = new Uint8Array(buf);
     //     console.log(imgArray.length)
