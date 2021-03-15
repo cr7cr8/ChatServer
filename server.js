@@ -96,7 +96,7 @@ io.on("connection", function (socket) {
     
     //     var imgArray = new Uint8Array(buf);
     //     console.log(imgArray.length)
-
+//
 
     // socket.emit("clientBuffer",{buffer:obj.buffer})
   })
