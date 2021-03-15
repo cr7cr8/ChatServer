@@ -85,6 +85,15 @@ router.post("/updateorder",authenticateToken,
     }
 )
 
+router.post("/updatecolorpos",authenticateToken,
+    function(req,res,next){
+
+
+    }
+)
+
+
+
 router.post("/postpic", authenticateToken, checkConnState, getFileArray, getAvatarImageArray, deleteFileByUserName, uploadFile,
     function (req, res, next) {
 

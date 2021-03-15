@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 1024
     },
-    friendsList: [{ type: String }],
+    friendsList: [{ type: Object }],
 },
     {
         toObject: { virtuals: true },

@@ -93,12 +93,12 @@ io.on("connection", function (socket) {
   socket.on("test", function (buf) {
     //   console.log("server ttttt",Object.keys(obj))
     //console.log(buf)
-    
-        // var imgArray = new Uint8Array(buf);
-        // console.log(imgArray.length)
+
+    // var imgArray = new Uint8Array(buf);
+    // console.log(imgArray.length)
 
 
-  //  socket.emit("clientBuffer",{buffer:obj.buffer})
+    //  socket.emit("clientBuffer",{buffer:obj.buffer})
   })
 
 
@@ -122,36 +122,45 @@ io.on("connection", function (socket) {
         const userSock = socketArr.find(userSock => {
           return (userSock.userName === item.userName) && (userSock.connected)
         })
-        return { userName: item.userName, key: item._id, isOnline: Boolean(userSock) }
+        return {
+          userName: item.userName,
+          name: item.userName,
+          key: item._id,
+          //    key_moving: Math.random(),
+          //    colorPos: Math.floor(Math.random() * 100) + 1000,
 
+          //  isOnline: Boolean(userSock),
+        }
       })
     }).then(arr => {
 
 
 
-
+      // socket.emit("receiveUsers", arr)
 
       User.findOne({ userName: socket.userName }).then(({ friendsList }) => {
         //  console.log(friendsList)
 
         const arr_ = []
         friendsList.forEach((friend) => {
-          arr.forEach(people => {
-            if (people.userName === friend) {
-              arr_.push(people)
+          arr.forEach((people, index) => {
+            if (people.userName === friend.name) {
+              arr_.push(friend)
+              //  arr[index] = null
             }
           })
         });
 
         arr.forEach(people => {
-          if (!friendsList.includes(people.userName)) {
+          if (arr_.findIndex(element => { return element.userName === people.userName }) < 0) {
             arr_.push(people)
           }
+
         })
 
 
-        io.to(socket.userName).emit("receiveUsers", arr_)
-
+        // io.to(socket.userName).emit("receiveUsers", arr_)
+        socket.emit("receiveUsers", arr_)
 
 
       })
