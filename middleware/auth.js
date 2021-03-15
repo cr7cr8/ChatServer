@@ -11,6 +11,7 @@ function authenticateToken(req, res, next) {
 
         req.header["user"] = decoded
         req.user = decoded
+        req.userName = decoded.userName
         next()
     }
     catch (err) {

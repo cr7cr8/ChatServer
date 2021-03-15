@@ -31,10 +31,15 @@ let offlineMessageArr = [];
 setInterval(function () {
   socketArr = socketArr.filter(socket => socket.connected)
   info.socketArr = socketArr
+  info.io = io
+  user.socketArr = socketArr
+  user.io = io
+
 }, 3600 * 1000);
 info.socketArr = socketArr
 info.io = io
-
+user.socketArr = socketArr
+user.io = io
 
 
 
@@ -46,7 +51,7 @@ io.use(
 
     socket.userName = socket.handshake.auth.userName
     socket.token = socket.handshake.auth.token
-    socket.createdTime = formatDistanceToNow(Date.now(), { locale: zhCN, })
+    socket.createdTime = Date.now()
 
 
     socketArr.forEach(function (socketItem) {
@@ -68,7 +73,7 @@ function checkOfflineMessage(name) {
   const list = [];
   offlineMessageArr = offlineMessageArr.filter(msg => {
     if (msg.toPerson === name) {
-    //  console.log(msg)
+      //  console.log(msg)
       list.push(msg)
     }
     else {
@@ -85,11 +90,24 @@ io.on("connection", function (socket) {
   socket.join(socket.userName)
 
 
+  socket.on("test", function (buf) {
+    //   console.log("server ttttt",Object.keys(obj))
+    console.log(buf)
+
+    //     var imgArray = new Uint8Array(buf);
+    //     console.log(imgArray.length)
+
+
+    // socket.emit("clientBuffer",{buffer:obj.buffer})
+  })
+
+
+
 
   socket.on("getOfflineMessage", function () {
     const list = checkOfflineMessage(socket.userName)
     list.forEach(msg => {
-      console.log("who said is", msg.whoSaid, "toPerson is", msg.toPerson,"socket UserName is", socket.userName)
+      console.log("who said is", msg.whoSaid, "toPerson is", msg.toPerson, "socket UserName is", socket.userName)
       socket.emit("receiveMessage", msg.whoSaid, msg)
     })
 
@@ -98,9 +116,8 @@ io.on("connection", function (socket) {
 
   socket.on("getAllUsers", () => {
 
-    User.find().find().then(docs => {
-
-      const arr = docs.map((item) => {
+    User.find({}).then(docs => {
+      return docs.map((item) => {
 
         const userSock = socketArr.find(userSock => {
           return (userSock.userName === item.userName) && (userSock.connected)
@@ -108,31 +125,61 @@ io.on("connection", function (socket) {
         return { userName: item.userName, key: item._id, isOnline: Boolean(userSock) }
 
       })
+    }).then(arr => {
 
-      io.to(socket.userName).emit("receiveUsers", arr)
+
+
+
+
+      User.findOne({ userName: socket.userName }).then(({ friendsList }) => {
+        //  console.log(friendsList)
+
+        const arr_=[]
+        friendsList.forEach((friend) => {
+          arr.forEach(people=>{
+            if (people.userName === friend){
+              arr_.push(people)
+            }
+          })
+        });
+
+        arr.forEach(people=>{
+          if (!friendsList.includes(people.userName)){
+            arr_.push(people)
+          }
+        })
+
+
+        io.to(socket.userName).emit("receiveUsers", arr_)
+
+
+
+      })
+
+
 
     })
   })
 
   socket.on("toAnother", function (toPerson, msg) {
 
-   // if (toPerson === socket.userName) { return }
+    // if (toPerson === socket.userName) { return }
     const userSock = socketArr.find(userSock => {
       return (userSock.userName === toPerson) && (userSock.connected)
     })
     if (userSock) { userSock.emit("receiveMessage", socket.userName, msg) }
     else {
-     // console.log(msg)
+      // console.log(msg)
       offlineMessageArr.push(msg)
     }
 
     //io.to(toPerson).emit("receiveMessage", socket.userName, msg)
   })
 
-  socket.on("updateAvatar",function(data){
+  socket.on("updateAvatar", function (data) {
 
     console.log(data.length)
-  //  console.log(Object.keys(data))
+    //  console.log(Object.keys(data))
     // console.log("inside receiver");
     // const buffer = Buffer.from(img);
     // console.log(buffer.length[1])

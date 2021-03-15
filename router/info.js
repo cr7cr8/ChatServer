@@ -27,10 +27,10 @@ router.get("/", function (req, res, next) {
   let allConnectedId = `Connected sockets ${socketArr.length}<br />`;
   let allId = `All sockets ${router.socketArr.length}<br />`;
 
-
-  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" + soc.createdTime + "<br />" })
+  
+  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" + formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   socketArr.reverse()
-  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" + soc.createdTime + "<br />" })
+  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" +formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   router.socketArr.reverse()
 
 

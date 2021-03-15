@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 const { User } = require("../db/schema")
 const { authenticateToken, generateAndDispatchToken } = require('../middleware/auth')
-
+const fs = require("fs")
 
 const [{ checkConnState, getFileArray, uploadFile, deleteFileByUserName, downloadFile }] = require("../db/fileManager");
 const { getSmallImageArray, makeAvatar, makeBackPicture, getAvatarImageArray } = require("../db/picManager");
@@ -41,10 +41,18 @@ router.post("/login", (req, res, next) => {
 router.post("/register", (req, res, next) => {
 
     try {
-
         User.create({ ...req.body, password: bcrypt.hashSync(req.body.password) })
             .then(doc => {
+
+                // User.find({}).then(allPeopleArr => {
+                //     doc.friendsList = allPeopleArr.map((people) => { return people.userName })
+                //     return doc.save()
+                // }).then(()=>{
+                //     next()
+                // })
                 next()
+            
+             
             })
             .catch(err => {
                 if (err.code === 11000) {
@@ -62,16 +70,49 @@ router.post("/register", (req, res, next) => {
         res.status(500).json("failed to create in Server")
     }
 
-
 }, makeAvatar, uploadFile, generateAndDispatchToken)
 
 
 router.get("/avatar/:username/:rand", downloadFile)
 
 
+router.post("/updateorder",authenticateToken,
+    function(req,res,next){
+      
+        User.updateOne({userName:req.userName},{friendsList:req.body}).then(()=>{
+            res.json("order updated")
+        })
+    }
+)
 
 router.post("/postpic", authenticateToken, checkConnState, getFileArray, getAvatarImageArray, deleteFileByUserName, uploadFile,
     function (req, res, next) {
+
+
+        let socketArr = router.socketArr;
+        let io = router.io;
+
+
+
+
+        socketArr.forEach(socket => {
+            if (socket.userName === req.user.userName) {
+                socket.emit("clientBuffer", req.files[0].buffer)
+                //           socket.emit("clientBuffer", [...req.files[0].buffer,...req.files[0].buffer,...req.files[0].buffer,...req.files[0].buffer,...req.files[0].buffer,...req.files[0].buffer,   ])
+                //    console.log(Object.keys(req.files[0]))
+                //    const imgArray = new Uint8Array(req.files[0].buffer);
+                //   console.log(imgArray)
+
+
+
+                //      const rs = fs.createReadStream(req.files[0].buffer.toString())
+                //     rs.on("data", chunk => socket.emit("clientBuffer", chunk));
+                //    rs.on("end", () => resolve(hash.digest("hex")));
+
+
+
+            }
+        });
 
         // console.log(req.body.obj, req.user)
 
