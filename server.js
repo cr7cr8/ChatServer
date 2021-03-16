@@ -119,15 +119,14 @@ io.on("connection", function (socket) {
     User.find({}).then(docs => {
       return docs.map((item) => {
 
-        const userSock = socketArr.find(userSock => {
-          return (userSock.userName === item.userName) && (userSock.connected)
-        })
+        // const userSock = socketArr.find(userSock => {
+        //   return (userSock.userName === item.userName) && (userSock.connected)
+        // })
         return {
           userName: item.userName,
           name: item.userName,
           key: item._id,
-          //    key_moving: Math.random(),
-          //    colorPos: Math.floor(Math.random() * 100) + 1000,
+        
 
           //  isOnline: Boolean(userSock),
         }
