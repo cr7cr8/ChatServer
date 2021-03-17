@@ -7,7 +7,7 @@ const { zhCN } = require('date-fns/locale');
 
 
 const user = require("./router/user")
-const { User } = require("./db/schema")
+const { User, OfflineMessage } = require("./db/schema")
 
 
 const info = require("./router/info")
@@ -26,7 +26,7 @@ const server = app.listen(process.env.PORT || 80)
 
 const io = socketIO(server)
 let socketArr = [];
-let offlineMessageArr = [];
+
 
 setInterval(function () {
   socketArr = socketArr.filter(socket => socket.connected)
@@ -62,26 +62,7 @@ io.use(
   },
 );
 
-function getUserSocketByName(name) {
-  const userSock = socketArr.find(userSock => {
-    return (userSock.userName === name) && (userSock.connected)
-  })
-  return userSock
-}
 
-function checkOfflineMessage(name) {
-  const list = [];
-  offlineMessageArr = offlineMessageArr.filter(msg => {
-    if (msg.toPerson === name) {
-      //  console.log(msg)
-      list.push(msg)
-    }
-    else {
-      return msg
-    }
-  })
-  return list
-}
 
 
 io.on("connection", function (socket) {
@@ -105,12 +86,30 @@ io.on("connection", function (socket) {
 
 
   socket.on("getOfflineMessage", function () {
-    const list = checkOfflineMessage(socket.userName)
-    list.forEach(msg => {
-      console.log("who said is", msg.whoSaid, "toPerson is", msg.toPerson, "socket UserName is", socket.userName)
-      socket.emit("receiveMessage", msg.whoSaid, msg)
-    })
+  
+    OfflineMessage.find({ toPerson: socket.userName }).sort("saidTime").then(docs => {
+      //  console.log(docs)
+     return docs.forEach(msg => {
 
+        //Note {...msg} !== msg
+        const msg_ = {
+          key: msg.key,
+          saidTime: new Date(msg.saidTime).getTime(),
+          whoSaid: msg.whoSaid,
+          toPerson: msg.toPerson,
+          sentence: msg.sentence
+        }
+
+      
+        socket.emit("receiveMessage", msg.whoSaid, msg_)
+      })
+    }).then(
+      ()=>{
+        OfflineMessage.deleteMany({ toPerson: socket.userName }).exec()
+
+      }
+    ).catch(err=>console.log("error in getOfflineMessage",err))
+   
   })
 
 
@@ -119,14 +118,12 @@ io.on("connection", function (socket) {
     User.find({}).then(docs => {
       return docs.map((item) => {
 
-        // const userSock = socketArr.find(userSock => {
-        //   return (userSock.userName === item.userName) && (userSock.connected)
-        // })
+
         return {
           userName: item.userName,
           name: item.userName,
           key: item._id,
-        
+
 
           //  isOnline: Boolean(userSock),
         }
@@ -144,6 +141,7 @@ io.on("connection", function (socket) {
         friendsList.forEach((friend) => {
           arr.forEach((people, index) => {
             if (people.userName === friend.name) {
+              friend.key = people.key
               arr_.push(friend)
               //  arr[index] = null
             }
@@ -171,14 +169,16 @@ io.on("connection", function (socket) {
 
   socket.on("toAnother", function (toPerson, msg) {
 
-    // if (toPerson === socket.userName) { return }
+
     const userSock = socketArr.find(userSock => {
       return (userSock.userName === toPerson) && (userSock.connected)
     })
     if (userSock) { userSock.emit("receiveMessage", socket.userName, msg) }
     else {
-      // console.log(msg)
-      offlineMessageArr.push(msg)
+
+
+      OfflineMessage.create(msg)
+      console.log(msg)
     }
 
     //io.to(toPerson).emit("receiveMessage", socket.userName, msg)
