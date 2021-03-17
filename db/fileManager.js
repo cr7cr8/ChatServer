@@ -102,7 +102,7 @@ function uploadFile(connDB, collectionName, req, res, next) {
 
 function downloadFile(connDB, collectionName, req, res, next) {
 
-    console.log(collectionName)
+    //console.log(collectionName)
 
     var gfs = new mongoose.mongo.GridFSBucket(connDB.db, {   //connDB3.db
         chunkSizeBytes: 255 * 1024,

@@ -2,8 +2,33 @@ const mongoose = require("mongoose");
 const { connDB } = require("./db")
 
 
+const offlineMessageSchema = new mongoose.Schema({
+    saidTime: {
+        type: Date,
+        required: true,
+    },
+    whoSaid: {
+        type: String,
+        required: true,
+    },
+    toPerson: {
+        type: String,
+        required: true,
+    },
+    sentence: {
+        type: String,
+        minlength: 1,
+        required: true,
+    },
+    key:{
+        type:String,
+    }
+
+})
+
+
 const userSchema = new mongoose.Schema({
-   
+
     userName: {
         type: String,
         required: true,
@@ -31,7 +56,7 @@ const userSchema = new mongoose.Schema({
 
 
 const User = connDB.model("users", userSchema);
+const OfflineMessage = connDB.model("offlineMessages", offlineMessageSchema);
 
-
-module.exports = { User }
+module.exports = { User, OfflineMessage }
 
