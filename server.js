@@ -36,6 +36,23 @@ setInterval(function () {
   user.io = io
 
 }, 3600 * 1000);
+
+setInterval(function () {
+  socketArr.forEach(socket=>{
+    if(socket.connected){
+      socket.emit("helloPacket",Date.now())
+    }
+  })
+
+  // socketArr = socketArr.filter(socket => socket.connected)
+  // info.socketArr = socketArr
+  // info.io = io
+  // user.socketArr = socketArr
+  // user.io = io
+
+}, 1800 * 1000);
+
+
 info.socketArr = socketArr
 info.io = io
 user.socketArr = socketArr
@@ -196,7 +213,9 @@ io.on("connection", function (socket) {
 
   })
 
-
+  socket.on("helloResponseFromClient",function(data){
+    console.log(data)
+  })
 
 
   socket.on("disconnecting", function (reason) {
