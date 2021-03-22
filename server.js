@@ -23,7 +23,6 @@ app.get("/", (req, res) => { res.send("<h2>" + new Date() + "</h2>") })
 
 const server = app.listen(process.env.PORT || 80)
 
-
 const io = socketIO(server)
 let socketArr = [];
 
@@ -37,20 +36,13 @@ setInterval(function () {
 
 }, 3600 * 1000);
 
-setInterval(function () {
-  socketArr.forEach(socket=>{
-    if(socket.connected){
-      socket.emit("helloPacket",Date.now())
-    }
-  })
-
-  // socketArr = socketArr.filter(socket => socket.connected)
-  // info.socketArr = socketArr
-  // info.io = io
-  // user.socketArr = socketArr
-  // user.io = io
-
-}, 1800 * 1000);
+// setInterval(function () {
+//   socketArr.forEach(socket=>{
+//     if(socket.connected){
+//       socket.emit("helloPacket",Date.now())
+//     }
+//   })
+// }, 1800 * 1000);
 
 
 info.socketArr = socketArr
