@@ -12,6 +12,8 @@ let socketArr = router.socketArr;
 let io = router.io;
 
 router.counter = 0;
+router.backHelloCounter = 0;
+
 router.use(function (req, res, next) {
   socketArr = router.socketArr.filter(function (socket) { return socket.connected });
   io = router.io;
@@ -41,7 +43,9 @@ router.get("/", function (req, res, next) {
   <h1>running Time ${passingTime2}</h1> 
 
   <h2>io.engine.clientCount ${io.engine.clientsCount}</h2> 
-  <h2>hello time is ${router.helloTime&&format(router.helloTime,"HH:mm:ss",zhCN)}  updated times ${router.counter}</h2> 
+  <h2>hello time is ${router.helloTime && format(router.helloTime, "HH:mm:ss", { locale: zhCN })}  updated times ${router.counter}</h2> 
+  <h2>backhello time is ${ router.backHello && format(router.backHello, "HH:mm:ss", { locale: zhCN })}  updated times ${router.backHelloCounter}</h2> 
+
   <h2>${allConnectedId}</h2>  
 
 <br /> <br />
@@ -63,6 +67,8 @@ router.get("/send/:msg", function (req, res, next) {
 router.get("/hello", function (req, res, ) {
 
   console.log("task hello", new Date())
+  router.backHello = new Date()
+  router.backHelloCounter++
   res.send("task hello from server")
 })
 

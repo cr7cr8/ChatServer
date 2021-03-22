@@ -195,7 +195,7 @@ io.on("connection", function (socket) {
 
   socket.on("updateAvatar", function (data) {
 
-    console.log(data.length)
+    console.log(data.length) 
     //  console.log(Object.keys(data))
     // console.log("inside receiver");
     // const buffer = Buffer.from(img);
