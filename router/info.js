@@ -60,8 +60,12 @@ router.get("/send/:msg", function (req, res, next) {
   res.send("ok")
 })
 
+router.get("/hello",function(req,res,){
 
+  console.log("task hello",new Date())
+  res.send("task hello from server")
+})
 
-
+ 
 
 module.exports = router;

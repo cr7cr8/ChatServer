@@ -86,7 +86,7 @@ io.on("connection", function (socket) {
 
   socket.emit("toClient", "socket " + socket.id + " is established on server")
   socket.join(socket.userName)
-
+  console.log("socket "+socket.userName+" is connected")
 
   socket.on("test", function (buf) {
     //   console.log("server ttttt",Object.keys(obj))
@@ -221,10 +221,11 @@ io.on("connection", function (socket) {
   socket.on("disconnecting", function (reason) {
     // socket.leave(socket.userName) done automatically
     //console.log(socket.rooms, "---");
+    console.log(`socket ${socket.userName} is disconnected`)
   })
 
   socket.on("disconnect", function (reason) {
-
+  
   })
 
  
