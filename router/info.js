@@ -11,7 +11,7 @@ const startingTime = Date.now()
 let socketArr = router.socketArr;
 let io = router.io;
 
-
+router.counter = 0;
 router.use(function (req, res, next) {
   socketArr = router.socketArr.filter(function (socket) { return socket.connected });
   io = router.io;
@@ -27,10 +27,10 @@ router.get("/", function (req, res, next) {
   let allConnectedId = `Connected sockets ${socketArr.length}<br />`;
   let allId = `All sockets ${router.socketArr.length}<br />`;
 
-  
-  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" + formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
+
+  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" +/* soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   socketArr.reverse()
-  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + soc.token + "&nbsp;&nbsp;" +formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
+  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + /*soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   router.socketArr.reverse()
 
 
@@ -41,10 +41,10 @@ router.get("/", function (req, res, next) {
   <h1>running Time ${passingTime2}</h1> 
 
   <h2>io.engine.clientCount ${io.engine.clientsCount}</h2> 
-
+  <h2>hello time is ${router.helloTime&&format(router.helloTime,"HH:mm:ss",zhCN)}  updated times ${router.counter}</h2> 
   <h2>${allConnectedId}</h2>  
 
-
+<br /> <br />
   <h2>${allId}</h2>  
   `)
 
@@ -60,12 +60,12 @@ router.get("/send/:msg", function (req, res, next) {
   res.send("ok")
 })
 
-router.get("/hello",function(req,res,){
+router.get("/hello", function (req, res, ) {
 
-  console.log("task hello",new Date())
+  console.log("task hello", new Date())
   res.send("task hello from server")
 })
 
- 
+
 
 module.exports = router;

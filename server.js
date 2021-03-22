@@ -206,6 +206,9 @@ io.on("connection", function (socket) {
   })
 
   socket.on("helloResponseFromClient",function(data){
+
+    info.helloTime = new Date()
+    info.counter++
     console.log(data)
   })
 
