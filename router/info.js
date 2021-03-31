@@ -5,7 +5,7 @@ const { zhCN } = require('date-fns/locale');
 
 const [{ checkConnState, getFileArray, uploadFile, downloadFile }] = require("../db/fileManager");
 
-
+const fetch = require('node-fetch');
 
 const startingTime = Date.now()
 let socketArr = router.socketArr;
@@ -55,6 +55,28 @@ router.get("/", function (req, res, next) {
 })
 
 
+router.get("/noti",function(req,res,next){
+
+  const message = {
+    to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
+    sound: 'default',
+    title: 'Original Title',
+    body: 'And here is the body!',
+    data: { someData: 'goes here' },
+  };
+
+   fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+
+  res.send("noti")
+})
 
 router.get("/send/:msg", function (req, res, next) {
 

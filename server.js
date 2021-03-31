@@ -4,6 +4,7 @@ const cors = require("cors");
 const socketIO = require("socket.io")
 const { compareAsc, format, formatDistanceToNow, } = require("date-fns");
 const { zhCN } = require('date-fns/locale');
+const fetch = require('node-fetch');
 
 
 const user = require("./router/user")
@@ -64,7 +65,7 @@ io.use(
 
 
     socketArr.forEach(function (socketItem) {
-      if (socketItem.userName === socket.userName) { socketItem.disconnect() }
+      if (socketItem.userName === socket.userName) { socketItem.disconnect(true); socketItem.offline = true }
     })
     socketArr.push(socket)
     next()
@@ -78,7 +79,7 @@ io.on("connection", function (socket) {
 
   socket.emit("toClient", "socket " + socket.id + " is established on server")
   socket.join(socket.userName)
-  console.log("socket "+socket.userName+" is connected")
+  console.log("socket " + socket.userName + " is connected")
 
   socket.on("test", function (buf) {
     //   console.log("server ttttt",Object.keys(obj))
@@ -95,10 +96,10 @@ io.on("connection", function (socket) {
 
 
   socket.on("getOfflineMessage", function () {
-  
+
     OfflineMessage.find({ toPerson: socket.userName }).sort("saidTime").then(docs => {
       //  console.log(docs)
-     return docs.forEach(msg => {
+      return docs.forEach(msg => {
 
         //Note {...msg} !== msg
         const msg_ = {
@@ -109,16 +110,16 @@ io.on("connection", function (socket) {
           sentence: msg.sentence
         }
 
-      
+
         socket.emit("receiveMessage", msg.whoSaid, msg_)
       })
     }).then(
-      ()=>{
+      () => {
         OfflineMessage.deleteMany({ toPerson: socket.userName }).exec()
 
       }
-    ).catch(err=>console.log("error in getOfflineMessage",err))
-   
+    ).catch(err => console.log("error in getOfflineMessage", err))
+
   })
 
 
@@ -185,17 +186,45 @@ io.on("connection", function (socket) {
     if (userSock) { userSock.emit("receiveMessage", socket.userName, msg) }
     else {
 
+      let notiSocket = "";
+      socketArr.forEach(sock => {
+        if((sock.userName === toPerson )&&(!Boolean(sock.offline))){
+          
+          notiSocket = sock
+        }
+      })
+
 
       OfflineMessage.create(msg)
       console.log(msg)
-    }
+
+     
+        const message = {
+          to: notiSocket.notiToken,
+          sound: 'default',
+          title: msg.whoSaid,
+          body: msg.sentence,
+        };
+
+        fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(message),
+        })
+      }
+
+ 
 
     //io.to(toPerson).emit("receiveMessage", socket.userName, msg)
   })
 
   socket.on("updateAvatar", function (data) {
 
-    console.log(data.length) 
+    console.log(data.length)
     //  console.log(Object.keys(data))
     // console.log("inside receiver");
     // const buffer = Buffer.from(img);
@@ -205,12 +234,25 @@ io.on("connection", function (socket) {
 
   })
 
-  socket.on("helloResponseFromClient",function(data){
+  socket.on("helloResponseFromClient", function (data) {
 
     info.helloTime = new Date() //+" " + socket.userName
     info.counter++
     console.log(data)
     socket.emit("helloPacket", new Date())
+  })
+
+  socket.on("registNotiTokenOnServer", function (notiToken) {
+    console.log(notiToken)
+    if (notiToken !== "") {
+      socket.notiToken = notiToken
+    }
+  })
+
+  socket.on("registNotiTokenOff",function(){
+    socket.offline = true;
+    socket.disconnect(true)
+    console.log(socket.offline)
   })
 
 
@@ -221,10 +263,10 @@ io.on("connection", function (socket) {
   })
 
   socket.on("disconnect", function (reason) {
-  
+
   })
 
- 
+
 })
 
 
