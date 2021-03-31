@@ -62,7 +62,7 @@ io.use(
     socket.userName = socket.handshake.auth.userName
     socket.token = socket.handshake.auth.token
     socket.createdTime = Date.now()
-
+    socket.offline = false
 
     socketArr.forEach(function (socketItem) {
       if (socketItem.userName === socket.userName) { socketItem.disconnect(true); socketItem.offline = true }
@@ -181,7 +181,7 @@ io.on("connection", function (socket) {
 
 
     const userSock = socketArr.find(userSock => {
-      return (userSock.userName === toPerson) && (userSock.connected)
+      return (userSock.userName === toPerson) && (userSock.connected)&&(!Boolean(userSock.offline))
     })
     if (userSock) { userSock.emit("receiveMessage", socket.userName, msg) }
     else {
