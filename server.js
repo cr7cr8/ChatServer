@@ -2,14 +2,19 @@ const express = require("express")
 const app = express()
 const cors = require("cors");
 const socketIO = require("socket.io")
-const { compareAsc, format, formatDistanceToNow, } = require("date-fns");
+const { compareAsc, format, formatDistanceToNow,  } = require("date-fns");
+const { listTimeZones } = require('timezone-support')
+const { parseFromTimeZone, formatToTimeZone } = require('date-fns-timezone')
+ 
+// List canonical time zone names: [ 'Africa/Abidjan', ... ]
+//Asia/Shanghai
+
 const { zhCN } = require('date-fns/locale');
 const fetch = require('node-fetch');
 
 
 const user = require("./router/user")
 const { User, OfflineMessage } = require("./db/schema")
-
 
 const info = require("./router/info")
 
@@ -19,7 +24,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/api/user", user)
 app.use("/info", info)
 
-app.get("/", (req, res) => { res.send("<h2>" + new Date() + "v2.2 </h2>") })
+app.get("/", (req, res) => { res.send("<h2>" + formatToTimeZone(new Date(), 'YYYY.MM.DD -- HH:mm:ss -- ', { timeZone: 'Asia/Shanghai' }) + " v2.2 </h2>") })
 
 
 const server = app.listen(process.env.PORT || 80)
