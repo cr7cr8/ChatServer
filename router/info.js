@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { compareAsc, format, formatDistanceToNow, utcTo } = require("date-fns");
 const { zhCN } = require('date-fns/locale');
+const { listTimeZones } = require('timezone-support')
+const { parseFromTimeZone, formatToTimeZone } = require('date-fns-timezone')
 
 const [{ checkConnState, getFileArray, uploadFile, downloadFile }] = require("../db/fileManager");
 
@@ -36,9 +38,10 @@ router.get("/", function (req, res, next) {
   router.socketArr.reverse()
 
 
-
+ 
   res.send(`
-  <h1>starting Time ${String(new Date(startingTime)).substr(0, 24)}</h1> 
+  <h3>started on ${formatToTimeZone(startingTime, 'YYYY.MM.DD -dddd -- hh:mm:ss A -- ', { timeZone: 'Asia/Shanghai' })}</h3>
+
   <h1>passing Sec ${(passingTime1 / 1000).toFixed(0)}</h1> 
   <h1>running Time ${passingTime2}</h1> 
 
