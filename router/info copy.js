@@ -44,6 +44,8 @@ router.get("/", function (req, res, next) {
   <h2>io.engine.clientCount ${io.engine.clientsCount}</h2> 
   <h2>hello time is ${formatToTimeZone(router.helloTime, "HH:mm:ss", { timeZone: 'Asia/Shanghai' })}  updated times ${router.counter}</h2> 
  
+  <h2>backhello time is ${ router.backHello && format(router.backHello, "HH:mm:ss", { locale: zhCN })}  updated times ${router.backHelloCounter}</h2> 
+
   <h2>${allConnectedId}</h2>  
 
 <br /> <br />
