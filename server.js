@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/api/user", user)
 app.use("/info", info)
 
-app.get("/", (req, res) => { res.send("<h2>" + new Date() + "</h2>") })
+app.get("/", (req, res) => { res.send("<h2>" + new Date() + "v2.2 </h2>") })
 
 
 const server = app.listen(process.env.PORT || 80)
