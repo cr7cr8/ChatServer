@@ -40,7 +40,7 @@ router.get("/", function (req, res, next) {
 
  
   res.send(`
-  <h3>started on - ${formatToTimeZone(startingTime, 'YYYY.MM.DD - dddd - hh:mm:ss A', { timeZone: 'Asia/Shanghai' })} - ${passingTime2} - sec ${(passingTime1 / 1000).toFixed(0)}  </h3>
+  <h3>started on - ${formatToTimeZone(startingTime, 'YYYY.MM.DD - dddd - hh:mm:ss A', { timeZone: 'Asia/Shanghai' })} - ${passingTime2} - passing sec ${(passingTime1 / 1000).toFixed(0)}  </h3>
 
 
  
