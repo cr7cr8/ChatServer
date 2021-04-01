@@ -55,25 +55,30 @@ router.get("/", function (req, res, next) {
 })
 
 
-router.get("/noti",function(req,res,next){
+router.get("/noti", function (req, res, next) {
 
-  const message = {
-    to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
-    sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
-    data: { someData: 'goes here' },
-  };
+  socketArr.forEach(socket => {
+    const message = {
+     // to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
+      to:socket.notiToken,
+      sound: 'default',
+      title: 'Testing Noti push from web',
+      body: 'And here is the body!',
+      data: { someData: 'goes here' },
+    };
 
-   fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
+    fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  })
+
+
 
   res.send("noti")
 })
