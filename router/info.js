@@ -40,10 +40,10 @@ router.get("/", function (req, res, next) {
 
  
   res.send(`
-  <h3>started on ${formatToTimeZone(startingTime, 'YYYY.MM.DD -dddd -- hh:mm:ss A -- ', { timeZone: 'Asia/Shanghai' })}</h3>
+  <h3>started on - ${formatToTimeZone(startingTime, 'YYYY.MM.DD - dddd - hh:mm:ss A', { timeZone: 'Asia/Shanghai' })} - ${passingTime2} - sec ${(passingTime1 / 1000).toFixed(0)}  </h3>
 
-  <h1>passing Sec ${(passingTime1 / 1000).toFixed(0)}</h1> 
-  <h1>running Time ${passingTime2}</h1> 
+
+ 
 
   <h2>io.engine.clientCount ${io.engine.clientsCount}</h2> 
   <h2>hello time is ${router.helloTime && format(router.helloTime, "HH:mm:ss", { locale: zhCN })}  updated times ${router.counter}</h2> 
