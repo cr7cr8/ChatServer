@@ -202,7 +202,7 @@ io.on("connection", function (socket) {
         const message = {
           to: notiSocket.notiToken,
           sound: 'default',
-          title: msg.whoSaid,
+          title: msg.whoSaid + " - From Server",
           body: msg.sentence,
         };
 
