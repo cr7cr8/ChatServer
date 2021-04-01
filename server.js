@@ -34,14 +34,14 @@ const io = socketIO(server)
 let socketArr = [];
 
 
-setInterval(function () {
-  socketArr = socketArr.filter(socket => socket.connected)
-  info.socketArr = socketArr
-  info.io = io
-  user.socketArr = socketArr
-  user.io = io
+// setInterval(function () {
+//   socketArr = socketArr.filter(socket => socket.connected)
+//   info.socketArr = socketArr
+//   info.io = io
+//   user.socketArr = socketArr
+//   user.io = io
 
-}, 3600 * 1000);
+// }, 3600 * 1000);
 
 // setInterval(function () {
 //   socketArr.forEach(socket=>{

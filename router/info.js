@@ -81,13 +81,7 @@ router.get("/noti", function (req, res, next) {
   res.send("noti")
 })
 
-router.get("/send/:msg", function (req, res, next) {
 
-  socketArr.forEach(function (socket) {
-    socket.emit("ChannelOneClient", req.params.msg)
-  })
-  res.send("ok")
-})
 
 router.get("/hello", function (req, res, ) {
 
