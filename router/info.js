@@ -17,7 +17,13 @@ router.counter = 0;
 router.backHelloCounter = 0;
 
 router.use(function (req, res, next) {
-  socketArr = router.socketArr.filter(function (socket) { return socket.connected });
+  socketArr = router.socketArr.filter(function (socket) {
+    return socket.connected || (!socket.offline)
+  });
+
+  socketArr = router.socketArr
+
+
   io = router.io;
   next()
 })
@@ -75,13 +81,13 @@ router.get("/noti", function (req, res, next) {
         },
         body: JSON.stringify(message),
       });
-    } 
+    }
   })
 
 
 
 
-  res.json(socketArr.map(socket=>[socket.id,socket.userName]))
+  res.json(socketArr.map(socket => [socket.id, socket.userName]))
 })
 
 
