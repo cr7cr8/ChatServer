@@ -64,7 +64,7 @@ router.get("/noti", function (req, res, next) {
     socketObj[socket.userName] = socket
   })
 
-  const activeSockerArr = Object.values(socektObj)
+  const activeSockerArr = Object.values(socketObj)
 
 
   activeSockerArr.forEach(socket => {
