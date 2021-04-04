@@ -228,9 +228,11 @@ io.on("connection", function (socket) {
     //io.to(toPerson).emit("receiveMessage", socket.userName, msg)
   })
 
-  socket.on("updateAvatar", function (data) {
+  socket.on("getBuf", function (data) {
 
-    console.log(data.length)
+  //  console.log(data.length)
+
+    console.log(new Int8Array(data).length)
     //  console.log(Object.keys(data))
     // console.log("inside receiver");
     // const buffer = Buffer.from(img);
