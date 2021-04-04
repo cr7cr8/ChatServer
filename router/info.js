@@ -98,14 +98,18 @@ router.get("/noti", function (req, res, next) {
 
 
 
-router.get("/hello", function (req, res, ) {
+router.get("/hello", function (req, res ) {
 
   router.count = router.count?(router.count+1):1
-  res.send("<h1>"+router.count + " "+ new Date()+"</h1>")
+  router.lasttime = formatToTimeZone(Date.now(), "MM.DD HH:mm:ss A", { timeZone: 'Asia/Shanghai' })
+  res.send("<h1>hello page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" </h1>")
 
 })
 
+router.get("/check",function(req,res){
 
+  res.send("<h1>check page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" </h1>")
+})
 
 
 module.exports = router;
