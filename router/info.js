@@ -100,11 +100,11 @@ router.get("/noti", function (req, res, next) {
 
 router.get("/hello", function (req, res, ) {
 
-  console.log("task hello", new Date())
-  router.backHello = new Date()
-  router.backHelloCounter++
-  res.send("task hello from server")
+  router.count = router.count?(router.count+1):0
+  res.send("<h1>"+router.count + " "+ new Date()+"</h1>")
+
 })
+
 
 
 
