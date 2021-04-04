@@ -93,7 +93,7 @@ router.get("/noti", function (req, res, next) {
 
 
 
-  res.send("<h2>"+activeSockerArr.map(socket => [socket.id.substring(0,5), socket.userName])+"</h2>")
+  res.send(activeSockerArr.map(socket => "<h2>"+socket.id.substring(0,5)+", "+socket.userName+"</h2>"))
 })
 
 
