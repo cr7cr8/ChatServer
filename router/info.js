@@ -100,7 +100,7 @@ router.get("/noti", function (req, res, next) {
 
 router.get("/hello", function (req, res, ) {
 
-  router.count = router.count?(router.count+1):0
+  router.count = router.count?(router.count+1):1
   res.send("<h1>"+router.count + " "+ new Date()+"</h1>")
 
 })
