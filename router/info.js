@@ -107,7 +107,7 @@ router.get("/hello/:socketstate", function (req, res ) {
 
 })
 
-router.get("/check/:socketstate",function(req,res){
+router.get("/check",function(req,res){
 
   res.send("<h1>check page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" "+ router.socketstate +" </h1>")
 })
