@@ -81,7 +81,7 @@ router.get("/noti", function (req, res, next) {
 
 
 
-  res.json(socketArr.map(socket=>socket.id))
+  res.json(socketArr.map(socket=>[socket.id,socket.userName]))
 })
 
 
