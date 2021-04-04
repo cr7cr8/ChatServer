@@ -75,7 +75,7 @@ router.get("/noti", function (req, res, next) {
         },
         body: JSON.stringify(message),
       });
-    }
+    } 
   })
 
 
