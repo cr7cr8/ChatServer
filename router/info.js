@@ -18,11 +18,8 @@ router.backHelloCounter = 0;
 
 router.use(function (req, res, next) {
   socketArr = router.socketArr.filter(function (socket) {
-    return socket.connected || (!socket.offline)
+    return socket.connected 
   });
-
-  socketArr = router.socketArr
-
 
   io = router.io;
   next()
@@ -61,7 +58,7 @@ router.get("/", function (req, res, next) {
 
 router.get("/noti", function (req, res, next) {
 
-  socketArr.forEach(socket => {
+  router.socketArr.forEach(socket => {
     if (!Boolean(socket.offline)) {
       const message = {
         // to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
@@ -87,7 +84,7 @@ router.get("/noti", function (req, res, next) {
 
 
 
-  res.json(socketArr.map(socket => [socket.id.substring(0,5), socket.userName]))
+  res.json(router.socketArr.map(socket => [socket.id.substring(0,5), socket.userName]))
 })
 
 
