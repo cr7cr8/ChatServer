@@ -58,7 +58,16 @@ router.get("/", function (req, res, next) {
 
 router.get("/noti", function (req, res, next) {
 
+  const socketObj = {}
+
   router.socketArr.forEach(socket => {
+    socketObj[socket.userName] = socket
+  })
+
+  const activeSockerArr = Object.values(socektObj)
+
+
+  activeSockerArr.forEach(socket => {
     if (!Boolean(socket.offline)) {
       const message = {
         // to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
@@ -84,7 +93,7 @@ router.get("/noti", function (req, res, next) {
 
 
 
-  res.json(router.socketArr.map(socket => [socket.id.substring(0,5), socket.userName]))
+  res.json(activeSockerArr.map(socket => [socket.id.substring(0,5), socket.userName]))
 })
 
 
