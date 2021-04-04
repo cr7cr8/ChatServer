@@ -98,17 +98,18 @@ router.get("/noti", function (req, res, next) {
 
 
 
-router.get("/hello", function (req, res ) {
+router.get("/hello/:socketstate", function (req, res ) {
 
   router.count = router.count?(router.count+1):1
   router.lasttime = formatToTimeZone(Date.now(), "MM.DD HH:mm:ss A", { timeZone: 'Asia/Shanghai' })
+  router.socketstate = req.params.socketstate
   res.send("<h1>hello page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" </h1>")
 
 })
 
-router.get("/check",function(req,res){
+router.get("/check/:socketstate",function(req,res){
 
-  res.send("<h1>check page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" </h1>")
+  res.send("<h1>check page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" "+ router.socketstate +" </h1>")
 })
 
 
