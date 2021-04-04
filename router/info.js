@@ -64,7 +64,7 @@ router.get("/noti", function (req, res, next) {
         // to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
         to: socket.notiToken,
         sound: 'default',
-        title: 'Testing Noti push from web',
+        title: new Date()+' web push tesing',
         body: 'And here is the body!',
         data: { someData: 'goes here' },
       };
