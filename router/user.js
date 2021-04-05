@@ -128,7 +128,12 @@ router.post("/postpic", authenticateToken, checkConnState, getFileArray, getAvat
         res.json(req.user.userName + ".png is uploaded")
     })
 
-
+router.get("/setpushnoti/:value",authenticateToken,function(req,res,next){
+  
+    User.updateOne({userName:req.userName},{pushNotificationOn:req.params.value==="true"}).then(()=>{
+        res.json(`${req.userName} pushNoti is set to ${req.params.value==="true"}`)
+    })
+})
 
 
 

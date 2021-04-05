@@ -45,6 +45,12 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
     friendsList: [{ type: Object }],
+    pushNotificationOn:{
+        type:Boolean,
+        required:true,
+        default:true,
+    }
+
 },
     {
         toObject: { virtuals: true },

@@ -3,11 +3,11 @@ const app = express()
 const cors = require("cors");
 const socketIO = require("socket.io")
 
-const { compareAsc, format, formatDistanceToNow,  } = require("date-fns");
+const { compareAsc, format, formatDistanceToNow, } = require("date-fns");
 const { zhCN } = require('date-fns/locale');
 const { listTimeZones } = require('timezone-support')
 const { parseFromTimeZone, formatToTimeZone } = require('date-fns-timezone')
- 
+
 
 
 
@@ -187,15 +187,15 @@ io.on("connection", function (socket) {
 
 
     const userSock = socketArr.find(userSock => {
-      return (userSock.userName === toPerson) && (userSock.connected)&&(!Boolean(userSock.offline))
+      return (userSock.userName === toPerson) && (userSock.connected) && (!Boolean(userSock.offline))
     })
     if (userSock) { userSock.emit("receiveMessage", socket.userName, msg) }
     else {
 
       let notiSocket = "";
       socketArr.forEach(sock => {
-        if((sock.userName === toPerson )&&(!Boolean(sock.offline))){
-          
+        if ((sock.userName === toPerson) && (!Boolean(sock.offline))) {
+
           notiSocket = sock
         }
       })
@@ -204,13 +204,15 @@ io.on("connection", function (socket) {
       OfflineMessage.create(msg)
       console.log(msg)
 
-     
-        const message = {
-          to: notiSocket.notiToken,
-          sound: 'default',
-          title: msg.whoSaid + " - From Server",
-          body: msg.sentence,
-        };
+
+      const message = {
+        to: notiSocket.notiToken,
+        sound: 'default',
+        title: msg.whoSaid + " - From Server",
+        body: msg.sentence,
+      };
+console.log("---",socket.notiOn)
+      if (socket.notiOn) {
 
         fetch('https://exp.host/--/api/v2/push/send', {
           method: 'POST',
@@ -222,15 +224,16 @@ io.on("connection", function (socket) {
           body: JSON.stringify(message),
         })
       }
+    }
 
- 
+
 
     //io.to(toPerson).emit("receiveMessage", socket.userName, msg)
   })
 
   socket.on("getBuf", function (data) {
 
-  //  console.log(data.length)
+    //  console.log(data.length)
 
     console.log(new Int8Array(data).length)
     //  console.log(Object.keys(data))
@@ -250,6 +253,26 @@ io.on("connection", function (socket) {
     socket.emit("helloPacket", new Date())
   })
 
+  socket.on("getPushNotificationOn", function () {
+    User.findOne({ userName: socket.userName }).then((user) => {
+      console.log("NotiOnIs", user.pushNotificationOn)
+      socket.notiOn = user.pushNotificationOn
+      socket.emit("receivePushNotificationOn", user.pushNotificationOn)
+
+    })
+
+  })
+
+  socket.on("setPushNotificationOn", function (value) {
+    console.log(Boolean(value), socket.userName)
+    User.updateOne({ userName: socket.userName }, { pushNotificationOn: value }).exec()
+    socket.notiOn = Boolean(value)
+    //User.updateOne({userName:req.userName},{pushNotificationOn:req.params.value==="true"})
+
+
+  })
+
+
   socket.on("registNotiTokenOnServer", function (notiToken) {
     console.log(notiToken)
     if (notiToken !== "") {
@@ -257,11 +280,12 @@ io.on("connection", function (socket) {
     }
   })
 
-  socket.on("registNotiTokenOff",function(){
+  socket.on("registNotiTokenOff", function () {
     socket.offline = true;
     socket.disconnect(true)
-    console.log(socket.offline)
+    //console.log(socket.offline)
   })
+
 
 
   socket.on("disconnecting", function (reason) {
