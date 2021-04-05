@@ -263,21 +263,21 @@ io.on("connection", function (socket) {
   socket.on("getPushNotificationOn", function () {
     User.findOne({ userName: socket.userName }).then((user) => {
       console.log("NotiOnIs", user.pushNotificationOn)
-      socket.notiOn = user.pushNotificationOn
+      // socket.notiOn = user.pushNotificationOn
       socket.emit("receivePushNotificationOn", user.pushNotificationOn)
 
     })
 
   })
 
-  socket.on("setPushNotificationOn", function (value) {
-    console.log(Boolean(value), socket.userName)
-    User.updateOne({ userName: socket.userName }, { pushNotificationOn: value }).exec()
-    socket.notiOn = Boolean(value)
-    //User.updateOne({userName:req.userName},{pushNotificationOn:req.params.value==="true"})
+  // socket.on("setPushNotificationOn", function (value) {
+  //   console.log(Boolean(value), socket.userName)
+  //   User.updateOne({ userName: socket.userName }, { pushNotificationOn: value }).exec()
+  //   socket.notiOn = Boolean(value)
+  //   //User.updateOne({userName:req.userName},{pushNotificationOn:req.params.value==="true"})
 
 
-  })
+  // })
 
 
   socket.on("registNotiTokenOnServer", function (notiToken) {
