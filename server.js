@@ -211,19 +211,26 @@ io.on("connection", function (socket) {
         title: msg.whoSaid + " - From Server",
         body: msg.sentence,
       };
-console.log("---",socket.notiOn)
-      if (socket.notiOn) {
 
-        fetch('https://exp.host/--/api/v2/push/send', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Accept-encoding': 'gzip, deflate',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(message),
-        })
-      }
+      User.findOne({ userName: toPerson }).then((user) => {
+
+        if (user.pushNotificationOn) {
+          fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Accept-encoding': 'gzip, deflate',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+          })
+        }
+
+
+      })
+
+
+
     }
 
 
