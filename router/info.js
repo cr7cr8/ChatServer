@@ -121,9 +121,10 @@ router.get("/hello/:socketstate", function (req, res) {
   //res.send("<h1>hello page</h1><h1> total hello time " + router.count + " ," + router.lasttime + " </h1>")
    
 }) 
-    
-router.get("/check", function (req, res) {
 
+let lastcheck =""
+router.get("/check", function (req, res) {
+  lastcheck = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastcheck
   res.send("<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>")
 })
 
