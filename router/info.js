@@ -98,7 +98,7 @@ router.get("/noti", function (req, res, next) {
 })
 
 
-
+let lastHello =""
 router.get("/hello/:socketstate", function (req, res) {
 
   router.count = router.count ? (router.count + 1) : 1
@@ -112,6 +112,10 @@ router.get("/hello/:socketstate", function (req, res) {
   const sock = router.socketArr.find(socket => socket.id.substring(0, 5) === req.params.socketstate.substring(0, 5))
 
   console.log(req.params.socketstate.substring(0, 5),sock ? Boolean(sock.connected) : false)
+
+  lastHello = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastHello
+
+
   res.json(sock ? Boolean(sock.connected) : false)
 
 
@@ -122,10 +126,11 @@ router.get("/hello/:socketstate", function (req, res) {
    
 }) 
 
-let lastcheck =""
+
 router.get("/check", function (req, res) {
-  lastcheck = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastcheck
-  res.send("<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>")
+  //lastHello = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastHello
+  //res.send("<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>")
+  res.send(lastHello)
 })
 
 
