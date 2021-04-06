@@ -18,7 +18,7 @@ router.backHelloCounter = 0;
 
 router.use(function (req, res, next) {
   socketArr = router.socketArr.filter(function (socket) {
-    return socket.connected 
+    return socket.connected
   });
 
   io = router.io;
@@ -35,9 +35,9 @@ router.get("/", function (req, res, next) {
   let allId = `All sockets ${router.socketArr.length}<br />`;
 
 
-  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id.substring(0,5) + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" +/* soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
+  socketArr.reverse().forEach(soc => { allConnectedId = allConnectedId + soc.id.substring(0, 5) + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" +/* soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   socketArr.reverse()
-  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id.substring(0,5) + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + /*soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
+  router.socketArr.reverse().forEach(soc => { allId = allId + soc.id.substring(0, 5) + "&nbsp;&nbsp;" + soc.userName + "&nbsp;&nbsp;" + /*soc.token + "&nbsp;&nbsp;" + */ formatDistanceToNow(soc.createdTime, { locale: zhCN, }) + "<br />" })
   router.socketArr.reverse()
 
 
@@ -49,7 +49,8 @@ router.get("/", function (req, res, next) {
  
   <h2>${allConnectedId}</h2>  
 
-<br /> <br />
+  <br /> 
+  <br />
   <h2>${allId}</h2>  
   `)
 
@@ -73,7 +74,7 @@ router.get("/noti", function (req, res, next) {
         // to: "ExponentPushToken[zf2BMVFHoITD_0URzleD9a]",
         to: socket.notiToken,
         sound: 'default',
-        title: socket.id.substring(0,5)+' web push tesing',
+        title: socket.id.substring(0, 5) + ' web push tesing',
         body: 'And here is the body!',
         data: { someData: 'goes here' },
       };
@@ -93,23 +94,37 @@ router.get("/noti", function (req, res, next) {
 
 
 
-  res.send(activeSockerArr.map(socket => `<h2>${socket.id.substring(0,5)}, ${socket.userName}, ${socket.connected}</h2>`).reverse().join(""))
+  res.send(activeSockerArr.map(socket => `<h2>${socket.id.substring(0, 5)}, ${socket.userName}, ${socket.connected}</h2>`).reverse().join(""))
 })
 
 
 
-router.get("/hello/:socketstate", function (req, res ) {
+router.get("/hello/:socketstate", function (req, res) {
 
-  router.count = router.count?(router.count+1):1
+  router.count = router.count ? (router.count + 1) : 1
   router.lasttime = formatToTimeZone(Date.now(), "MM.DD HH:mm:ss A", { timeZone: 'Asia/Shanghai' })
   router.socketstate = req.params.socketstate
-  res.send("<h1>hello page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" </h1>")
+  console.log(req.params.socketstate)
 
-})
+  let result = false;
 
-router.get("/check",function(req,res){
+  
+  const sock = router.socketArr.find(socket => socket.id.substring(0, 5) === req.params.socketstate.substring(0, 5))
 
-  res.send("<h1>check page</h1><h1> total hello time "+router.count + " ,"+ router.lasttime +" "+ router.socketstate +" </h1>")
+  console.log(req.params.socketstate.substring(0, 5),sock ? Boolean(sock.connected) : false)
+  res.json(sock ? Boolean(sock.connected) : false)
+
+
+  //console.log(socket)
+
+
+  //res.send("<h1>hello page</h1><h1> total hello time " + router.count + " ," + router.lasttime + " </h1>")
+   
+}) 
+    
+router.get("/check", function (req, res) {
+
+  res.send("<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>")
 })
 
 

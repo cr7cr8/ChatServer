@@ -256,13 +256,13 @@ io.on("connection", function (socket) {
 
     info.helloTime = new Date() //+" " + socket.userName
     info.counter++
-    console.log(data)
+    //console.log(data)
     socket.emit("helloPacket", new Date())
   })
 
   socket.on("getPushNotificationOn", function () {
     User.findOne({ userName: socket.userName }).then((user) => {
-      console.log("NotiOnIs", user.pushNotificationOn)
+      //console.log("NotiOnIs", user.pushNotificationOn)
       // socket.notiOn = user.pushNotificationOn
       socket.emit("receivePushNotificationOn", user.pushNotificationOn)
 
@@ -281,7 +281,7 @@ io.on("connection", function (socket) {
 
 
   socket.on("registNotiTokenOnServer", function (notiToken) {
-    console.log(notiToken)
+  //  console.log(notiToken)
     if (notiToken !== "") {
       socket.notiToken = notiToken
     }
