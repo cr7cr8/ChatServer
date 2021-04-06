@@ -113,7 +113,7 @@ router.get("/hello/:socketstate", function (req, res) {
 
   console.log(req.params.socketstate.substring(0, 5),sock ? Boolean(sock.connected) : false)
 
-  lastHello = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastHello
+  lastHello = "<h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastHello
 
 
   res.json(sock ? Boolean(sock.connected) : false)
@@ -130,7 +130,7 @@ router.get("/hello/:socketstate", function (req, res) {
 router.get("/check", function (req, res) {
   //lastHello = "<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>"+lastHello
   //res.send("<h1>check page</h1><h1> total hello time " + router.count + " ,     " + router.lasttime + " " + router.socketstate + " </h1>")
-  res.send(lastHello)
+  res.send("<h1>check page</h1>"+lastHello)
 })
 
 
