@@ -18,12 +18,15 @@ const user = require("./router/user")
 const { User, OfflineMessage } = require("./db/schema")
 
 const info = require("./router/info")
+const picture = require("./router/picture")
+
 
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/user", user)
 app.use("/info", info)
+app.use("/picture", picture)
 
 app.get("/", (req, res) => { res.send("<h2>" + formatToTimeZone(new Date(), 'YYYY.MM.DD -- HH:mm:ss -- ', { timeZone: 'Asia/Shanghai' }) + " v2.2 </h2>") })
 
@@ -56,6 +59,8 @@ info.socketArr = socketArr
 info.io = io
 user.socketArr = socketArr
 user.io = io
+picture.socketArr = socketArr
+picture.io = io
 
 
 
@@ -109,11 +114,17 @@ io.on("connection", function (socket) {
 
         //Note {...msg} !== msg
         const msg_ = {
+         
           key: msg.key,
           saidTime: new Date(msg.saidTime).getTime(),
           whoSaid: msg.whoSaid,
           toPerson: msg.toPerson,
-          sentence: msg.sentence
+          sentence: msg.sentence,
+          isImage:msg.isImage,
+          width:msg.width,
+          height:msg.height,
+          mongooseID:msg.mongooseID,
+
         }
 
 
@@ -281,7 +292,7 @@ io.on("connection", function (socket) {
 
 
   socket.on("registNotiTokenOnServer", function (notiToken) {
-  //  console.log(notiToken)
+    //  console.log(notiToken)
     if (notiToken !== "") {
       socket.notiToken = notiToken
     }

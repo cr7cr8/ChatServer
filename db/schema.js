@@ -22,6 +22,19 @@ const offlineMessageSchema = new mongoose.Schema({
     },
     key:{
         type:String,
+    },
+    isImage:{
+        type:Boolean,
+        default:false,
+    },
+    width:{
+        type:Number,
+    },
+    height:{
+        type:Number,     
+    },
+    mongooseID:{
+        type:String,
     }
 
 })

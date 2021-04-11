@@ -79,7 +79,7 @@ function uploadFile(connDB, collectionName, req, res, next) {
         gfsws.end(function () {
 
             req.files[index].mongooseID = gfsws.id
-
+            req.body.obj.mongooseID = gfsws.id
 
             if (index === req.files.length - 1) {
                 console.log("==== All files uploading is done ===");
@@ -296,7 +296,9 @@ module.exports = [
     {
         ...createFileManager(connDB, "avatar"),
     },
-
+    {
+        ...createFileManager(connDB, "picture"),
+    },
 
 
 ]
