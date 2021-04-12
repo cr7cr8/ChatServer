@@ -7,24 +7,33 @@ const { parseFromTimeZone, formatToTimeZone } = require('date-fns-timezone');
 const { authenticateToken, generateAndDispatchToken } = require('../middleware/auth');
 
 const { User, OfflineMessage } = require("../db/schema")
-const [{ }, { checkConnState, getFileArray, uploadFile, downloadFile }] = require("../db/fileManager");
+const [{ }, { checkConnState, getFileArray, uploadFile, downloadFile, deleteFileById ,deleteOldFile}] = require("../db/fileManager");
 const { getSmallImageArray, makeAvatar, makeBackPicture, getAvatarImageArray } = require("../db/picManager");
 
 
 const fetch = require('node-fetch');
 
+
+
+
+
+
 router.post("/",
   authenticateToken,
   checkConnState,
+  deleteOldFile,
   getFileArray,
   getSmallImageArray,
   uploadFile,
+
+ 
+
 
   function (req, res, next) {
     //  const {whoSaid,toPerson}
 
     res.json("got picture")
-    console.log(req.body.obj)
+    //console.log(req.body.obj)
     
     const { whoSaid, toPerson } = req.body.obj
     const msg = req.body.obj
@@ -45,7 +54,7 @@ router.post("/",
 
 
       OfflineMessage.create(msg)
-      console.log(msg)
+     // console.log(msg)
 
 
       const message = {
@@ -90,6 +99,7 @@ router.post("/",
 
 router.get("/:id",
   checkConnState,
+  deleteOldFile,
   downloadFile,
 
 )

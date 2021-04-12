@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { connDB, connDB2, connDB3, connDB4, connEmojiDB } = require("./db");
 //const Jimp = require('jimp');
 
-
+//const { OfflineMessage } = require("./schema")
 
 
 
@@ -18,6 +18,9 @@ function createFileManager(connDB, collectionName) {
         uploadFile: function (req, res, next) { uploadFile(connDB, collectionName, req, res, next) },
         downloadFile: function (req, res, next) { downloadFile(connDB, collectionName, req, res, next) },
         deleteFileByUserName: function (req, res, next) { deleteFileByUserName(connDB, collectionName, req, res, next) },
+        deleteFileById: function (req, res, next) { deleteFileById(connDB, collectionName, req, res, next) },
+        deleteOldFile: function (req, res, next) { deleteOldFile(connDB, collectionName, req, res, next) },
+
         isFileThere: function (req, res, next) { return isFileThere(connDB, collectionName, req, res, next) },
 
 
@@ -82,7 +85,7 @@ function uploadFile(connDB, collectionName, req, res, next) {
             req.body.obj.mongooseID = gfsws.id
 
             if (index === req.files.length - 1) {
-                console.log("==== All files uploading is done ===");
+                //  console.log("==== All files uploading is done ===");
 
 
 
@@ -149,7 +152,7 @@ function downloadFile(connDB, collectionName, req, res, next) {
             })
 
             gfsrs.on("close", function () {
-                console.log(`------downloading  ${doc.filename} Done !----`);
+                // console.log(`------downloading  ${doc.filename} Done !----`);
 
                 if (fileArr.length - 1 === index) {
                     res.end("", function () {
@@ -263,6 +266,36 @@ function deleteFileByUserName(connDB, collectionName, req, res, next) {
 
 }
 
+function deleteOldFile(connDB, collectionName, req, res, next) {
+
+    next()
+    console.log("xxxxxxxxxxxxxxxxxxxx")
+    var gfs = new mongoose.mongo.GridFSBucket(connDB.db, {
+        chunkSizeBytes: 255 * 1024,
+        bucketName: collectionName,
+    });
+    const cursor = gfs.find({ "metadata.saidTime": { $lt: Date.now() - 24*3600*1000  } }, { limit: 9999999 })
+    cursor.forEach((doc) => {
+        //   console.log("---",doc._id)
+
+        connDB.db.collection("offlinemessages").find({ isImage: true, mongooseID: String(doc._id) }).toArray(function (err, arr) {
+            if (arr.length > 0) {
+                console.log(arr.pop())
+            }
+            else {
+                gfs.delete(mongoose.Types.ObjectId(doc._id), function (err) {
+                    err
+                        ? (function () { console.log(err), res.status(500).send("deleting file error", err) }())
+                        : console.log("file " + doc.filename + " " + doc._id + " deleted");
+                })
+            }
+        })
+        // console.log(connDB.db.collection)
+    }) 
+
+
+
+}
 
 function deleteFileById(connDB, collectionName, req, res, next) {
 
